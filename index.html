@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercícios DOM e XML</title>
+    <style>
+
+        footer {
+            text-align: center;
+            padding: 3px;
+            background-color: #19252a;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<h1>Gerenciamento de Dados para WEB - Atividade 03</h1>
+
+<div class="exercicio">
+    <h2>1 - Compreensão da Estrutura DOM</h2>
+    <p>Árvore de nós na descrição do github</p>
+</div>
+
+<div class="exercicio">
+    <h2>2 - Acesso a Elementos e Conteúdo</h2>
+    <p>Acesse e exiba o título do segundo livro.</p>
+    <button onclick="exercicio2()">Mostrar Título do Segundo Livro</button>
+</div>
+
+<div class="exercicio">
+    <h2>3 - Iteração sobre Nós Filhos</h2>
+    <p>Itere sobre os childNodes do nó raiz.</p>
+    <button onclick="exercicio3()">Mostrar Nomes dos Nós Filhos</button>
+</div>
+
+<div class="exercicio">
+    <h2>4 - Alterando o Valor de um Nó de Texto</h2>
+    <p>Altere o preço do produto e mostre no console.</p>
+    <button onclick="exercicio4()">Alterar Preço e Mostrar</button>
+</div>
+
+<div class="exercicio">
+    <h2>5 - Adicionando um Novo Atributo</h2>
+    <p>Adicione um atributo "moeda" ao produto.</p>
+    <button onclick="exercicio5()">Adicionar Atributo e Mostrar</button>
+</div>
+
+<script>
+    // XML strings
+    const bibliotecaXml = `
+        <biblioteca>
+        <livro categoria="ficcao">
+        <titulo>O Guia do Mochileiro das Galáxias</titulo>
+        <autor>Douglas Adams</autor>
+        </livro>
+        <livro categoria="tecnico">
+        <titulo>Introdução ao XML</titulo>
+        <autor>Professor Exemplo</autor>
+        </livro>
+        </biblioteca>`;
+
+    const catalogoXml = `
+        <catalogo>
+        <produto id="A45">
+        <nome>Caneta Azul</nome>
+        <preco>2.50</preco>
+        <estoque>150</estoque>
+        </produto>
+        </catalogo>`;
+
+    const parser = new DOMParser();
+
+    function exercicio2() {
+        console.log("=== 2 - Acesso a Elementos ===");
+
+        const xmlDoc = parser.parseFromString(bibliotecaXml, "text/xml");
+        const segundoLivroTitulo = xmlDoc.getElementsByTagName("livro")[1]
+            .getElementsByTagName("titulo")[0];
+
+        console.log("Título do segundo livro:");
+        console.log(segundoLivroTitulo.firstChild.nodeValue);
+
+        console.log("------------------------------------");
+    }
+
+    function exercicio3() {
+        console.log("=== 3 - Iteração sobre Nós Filhos ===");
+
+        const xmlDoc = parser.parseFromString(bibliotecaXml, "text/xml");
+        const raiz = xmlDoc.documentElement;
+
+        console.log("Nós filhos de <biblioteca>:");
+
+        for (let i = 0; i < raiz.childNodes.length; i++) {
+            const no = raiz.childNodes[i];
+            if (no.nodeType === 1) {
+                console.log(no.nodeName);
+            }
+        }
+
+        console.log("------------------------------------");
+    }
+
+    function exercicio4() {
+        console.log("=== 4 - Alterando Valor de Nó de Texto ===");
+
+        const catalogoDoc = parser.parseFromString(catalogoXml, "text/xml");
+        const precoElement = catalogoDoc.querySelector('produto[id="A45"] preco');
+
+        console.log("Preço original:", precoElement.firstChild.nodeValue);
+
+        precoElement.firstChild.nodeValue = "3.00";
+
+        console.log("Novo preço:", precoElement.firstChild.nodeValue);
+
+        console.log("------------------------------------");
+    }
+
+    function exercicio5() {
+        console.log("=== 5 - Adicionando Novo Atributo ===");
+
+        const catalogoDoc = parser.parseFromString(catalogoXml, "text/xml");
+        const produtoElement = catalogoDoc.querySelector('produto[id="A45"]');
+
+        console.log("Atributos antes de adicionar:");
+        console.log("id:", produtoElement.getAttribute("id"));
+        console.log("moeda:", produtoElement.getAttribute("moeda"));
+
+        produtoElement.setAttribute("moeda", "BRL");
+
+        console.log("Atributos depois de adicionar:");
+        console.log("id:", produtoElement.getAttribute("id"));
+        console.log("moeda:", produtoElement.getAttribute("moeda"));
+
+        console.log("------------------------------------");
+    }
+</script>
+    <footer>
+        <p>Aluno: Felipe Gabriel</p>
+    </footer>
+
+</body>
+</html>
